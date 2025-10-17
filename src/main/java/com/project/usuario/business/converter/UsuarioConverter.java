@@ -44,6 +44,7 @@ public class UsuarioConverter {
 
     public Telefone paraTelefone(TelefoneDto telefoneDto) {
         return Telefone.builder()
+                .id(telefoneDto.getId())
                 .numero(telefoneDto.getNumero())
                 .ddd(telefoneDto.getDdd())
                 .build();
@@ -61,17 +62,18 @@ public class UsuarioConverter {
     }
 
     public List<EnderecoDto> paraListaEnderecoDto(List<Endereco> enderecoDtos) {
-        return enderecoDtos.stream().map(this::paraEndereco).toList();
+        return enderecoDtos.stream().map(this::paraEnderecoDto).toList();
     }
 
-    public EnderecoDto paraEndereco(Endereco enderecoDto) {
+    public EnderecoDto paraEnderecoDto(Endereco endereco) {
         return EnderecoDto.builder()
-                .rua(enderecoDto.getRua())
-                .numero(enderecoDto.getNumero())
-                .complemento(enderecoDto.getComplemento())
-                .cidade(enderecoDto.getCidade())
-                .estado(enderecoDto.getEstado())
-                .cep(enderecoDto.getCep())
+                .id(endereco.getId())
+                .rua(endereco.getRua())
+                .numero(endereco.getNumero())
+                .complemento(endereco.getComplemento())
+                .cidade(endereco.getCidade())
+                .estado(endereco.getEstado())
+                .cep(endereco.getCep())
                 .build();
     }
 
@@ -79,22 +81,43 @@ public class UsuarioConverter {
         return telefoneDto.stream().map(this::paraTelefoneDto).toList();
     }
 
-    public TelefoneDto paraTelefoneDto(Telefone telefoneDto) {
+    public TelefoneDto paraTelefoneDto(Telefone telefone) {
         return TelefoneDto.builder()
-                .numero(telefoneDto.getNumero())
-                .ddd(telefoneDto.getDdd())
+                .id(telefone.getId())
+                .numero(telefone.getNumero())
+                .ddd(telefone.getDdd())
                 .build();
     }
+
     //metodo de update só do usuario. Nele verificamos se o campo do dto é nulo, se for nulo mantemos o valor antigo, se não pegamos o valor novo
-    public Usuario updateUsuario(UsuarioDto usuarioDto, Usuario entity){
+    public Usuario updateUsuario(UsuarioDto usuarioDto, Usuario entity) {
         return Usuario.builder()
                 .nome(usuarioDto.getNome() != null ? usuarioDto.getNome() : entity.getNome())
                 .id(entity.getId())
                 .senha(usuarioDto.getSenha() != null ? usuarioDto.getSenha() : entity.getSenha())
-                .email(entity.getEmail() != null ? usuarioDto.getEmail() : entity.getEmail()
-                )
+                .email(entity.getEmail() != null ? usuarioDto.getEmail() : entity.getEmail())
                 .enderecos(entity.getEnderecos())
                 .telefones(entity.getTelefones())
+                .build();
+    }
+
+    public Endereco updateEndereco(EnderecoDto dto, Endereco entity) {
+        return Endereco.builder()
+                .id(entity.getId())
+                .rua(dto.getRua() != null ? dto.getRua() : entity.getRua())
+                .numero(dto.getNumero() != null ? dto.getNumero() : entity.getNumero())
+                .cidade(dto.getCidade() != null ? dto.getCidade() : entity.getCidade())
+                .cep(dto.getCep() != null ? dto.getCep() : entity.getCep())
+                .complemento(dto.getComplemento() != null ? dto.getComplemento() : entity.getComplemento())
+                .estado(dto.getEstado() != null ? dto.getEstado() : entity.getEstado())
+                .build();
+    }
+
+    public Telefone updateTelefone(TelefoneDto dto, Telefone entity) {
+        return Telefone.builder()
+                .id(entity.getId())
+                .ddd(dto.getDdd() != null ? dto.getDdd() : entity.getDdd())
+                .numero(dto.getNumero() != null ? dto.getNumero() : entity.getNumero())
                 .build();
     }
 
