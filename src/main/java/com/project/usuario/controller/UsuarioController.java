@@ -1,6 +1,8 @@
 package com.project.usuario.controller;
 
 import com.project.usuario.business.UsuarioService;
+import com.project.usuario.business.dto.EnderecoDto;
+import com.project.usuario.business.dto.TelefoneDto;
 import com.project.usuario.business.dto.UsuarioDto;
 import com.project.usuario.infrastructure.entity.Usuario;
 import com.project.usuario.infrastructure.security.JwtUtil;
@@ -22,7 +24,7 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<UsuarioDto> salvaUsuario(@RequestBody UsuarioDto usuarioDto) {
-        return ResponseEntity.ok (usuarioService.salvaUsuario(usuarioDto));
+        return ResponseEntity.ok(usuarioService.salvaUsuario(usuarioDto));
     }
 
     @PostMapping("/login")
@@ -35,7 +37,7 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<Usuario> buscaUsuarioPorEmail(@RequestParam("email") String email) {
+    public ResponseEntity<UsuarioDto> buscaUsuarioPorEmail(@RequestParam("email") String email) {
         return ResponseEntity.ok(usuarioService.buscarUsuarioPorEmail(email));
     }
 
@@ -43,5 +45,24 @@ public class UsuarioController {
     public ResponseEntity<Void> deletaUsuarioPorEmail(@PathVariable String email) {
         usuarioService.deletaUsuarioPorEmail(email);
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping
+    public ResponseEntity<UsuarioDto> atualizarDadosusuario(@RequestBody UsuarioDto dto,
+                                                            @RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(usuarioService.atualizaDadosUsuario(token, dto));
+
+    }
+
+    @PutMapping("/endereco")
+    public ResponseEntity<EnderecoDto> atualizaEndereco(@RequestBody EnderecoDto dto,
+                                                        @RequestParam("id") Long id) {
+        return ResponseEntity.ok(usuarioService.atualizaEndereco(id, dto));
+    }
+
+    @PutMapping("/telefone")
+    public ResponseEntity<TelefoneDto> atualizaTelefone(@RequestBody TelefoneDto dto,
+                                                        @RequestParam("id") Long id){
+        return ResponseEntity.ok(usuarioService.atualizaTelefone(id, dto));
     }
 }
