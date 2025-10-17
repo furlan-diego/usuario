@@ -76,13 +76,26 @@ public class UsuarioConverter {
     }
 
     public List<TelefoneDto> paraListaTelefonesDto(List<Telefone> telefoneDto) {
-        return telefoneDto.stream().map(this::paraTelefone).toList();
+        return telefoneDto.stream().map(this::paraTelefoneDto).toList();
     }
 
-    public TelefoneDto paraTelefone(Telefone telefoneDto) {
+    public TelefoneDto paraTelefoneDto(Telefone telefoneDto) {
         return TelefoneDto.builder()
                 .numero(telefoneDto.getNumero())
                 .ddd(telefoneDto.getDdd())
                 .build();
     }
+    //metodo de update só do usuario. Nele verificamos se o campo do dto é nulo, se for nulo mantemos o valor antigo, se não pegamos o valor novo
+    public Usuario updateUsuario(UsuarioDto usuarioDto, Usuario entity){
+        return Usuario.builder()
+                .nome(usuarioDto.getNome() != null ? usuarioDto.getNome() : entity.getNome())
+                .id(entity.getId())
+                .senha(usuarioDto.getSenha() != null ? usuarioDto.getSenha() : entity.getSenha())
+                .email(entity.getEmail() != null ? usuarioDto.getEmail() : entity.getEmail()
+                )
+                .enderecos(entity.getEnderecos())
+                .telefones(entity.getTelefones())
+                .build();
+    }
+
 }
